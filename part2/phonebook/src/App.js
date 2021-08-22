@@ -11,7 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [newSearch, setNewSearch] = useState("");
-  const [currentId, setCurrentId] = useState(0);
+  // const [currentId, setCurrentId] = useState(0);
   const [notification, setNotification] = useState(null);
   const [notificationClass, setNotificationClass] = useState(null);
 
@@ -80,15 +80,15 @@ const App = () => {
     event.preventDefault();
 
     if (!isRepeated(newName)) {
-      const id = currentId + 1;
-      const newContact = { id, name: newName, number: newPhone };
+
+      const newContact = { name: newName, number: newPhone };
       services
         .create(newContact)
-        .then(() => {
-          setPersons(persons.concat(newContact));
+        .then((response) => {
+         
+          setPersons(persons.concat(response.data));
           setNewName("");
           setNewPhone("");
-          setCurrentId(id);
           setNotification(
             `The new contact ${newContact.name} was added successfully`
           );
@@ -99,7 +99,8 @@ const App = () => {
           }, 5000);
         })
         .catch((err) => {
-          setNotification(`There was an error, sorry about that`);
+          
+          setNotification(`${err.response.data}`);
           setNotificationClass("error");
           setTimeout(() => {
             setNotificationClass(null);
@@ -135,7 +136,7 @@ const App = () => {
             setNotification(null);
           }, 5000);
         }).catch(err => {
-          setNotification(`There was an error ${err.message}`)
+          setNotification(`There was an error ${err.response.data}`)
       setNotificationClass('error')
       setTimeout(()=>{
         setNotificationClass(null);
